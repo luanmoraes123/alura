@@ -48,7 +48,7 @@ public class Principal {
             }
             Gson gson = new Gson();
             String json = gson.toJson(titulos);
-            FileWriter escrita = new FileWriter("filmes.txt");
+            FileWriter escrita = new FileWriter("filmes.json");
                 escrita.write(json);
                 escrita.close();
             leitor.close();
