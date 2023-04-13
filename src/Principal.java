@@ -1,28 +1,23 @@
-import java.util.ArrayList;
-
-import br.com.alura.screenmatch.modelos.Filme;
-import br.com.alura.screenmatch.modelos.Serie;
-import br.com.alura.screenmatch.modelos.Titulo;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 public class Principal {
     public static void main(String[] args) {
 
-        Filme meuFilme = new Filme("O poderoso chefao", 1970);
-        Serie lost = new Serie("Lost", 2000);
-        Filme outroFilme = new Filme("Avatar", 2023);;
-        var filmeDoPaulo = new Filme("Dogville", 2003);
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest httpReuqest = HttpRequest.newBuilder()
+                            .uri(URI.create("https://omdbapi.com/?t=matrix&apikey=667e4b0f"))
+                            .build();
 
-        ArrayList<Titulo> lista = new ArrayList<>();
-        lista.add(outroFilme);
-        lista.add(filmeDoPaulo);
-        lista.add(meuFilme);
-        lista.add(lost);
-
-        for (Titulo titulo : lista) {
-            System.out.println(titulo);
+        try {
+            HttpResponse<String> response = httpClient.send(httpReuqest, HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
-
-        lista.forEach(System.out::println);
-
-    }
+        
+}
 }
