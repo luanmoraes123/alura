@@ -19,6 +19,11 @@ import br.com.alura.screenmatch.modelos.TituloOmdb;
 public class Principal {
     public static void main(String[] args) {
 
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                .setPrettyPrinting()
+                .create();
+
         try {
             List<Titulo> titulos = new ArrayList<>();
             Scanner leitor = new Scanner(System.in);
@@ -26,7 +31,7 @@ public class Principal {
 
             while (!filme.equalsIgnoreCase("sair")) {
                 filme = leitor.nextLine();
-                if(filme.equalsIgnoreCase("sair")){
+                if (filme.equalsIgnoreCase("sair")) {
                     break;
                 }
                 String endereco = "https://omdbapi.com/?t=" + filme.replace(" ", "+") + "&apikey=667e4b0f";
@@ -37,20 +42,16 @@ public class Principal {
                         .build();
 
                 HttpResponse<String> response = httpClient.send(httpReuqest, HttpResponse.BodyHandlers.ofString());
-                Gson gson = new GsonBuilder()
-                        .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                        .create();
 
                 TituloOmdb meuTituloOmdb = gson.fromJson(response.body(), TituloOmdb.class);
                 Titulo meuTitulo = new Titulo(meuTituloOmdb);
                 titulos.add(meuTitulo);
-                
+
             }
-            Gson gson = new Gson();
             String json = gson.toJson(titulos);
             FileWriter escrita = new FileWriter("filmes.json");
-                escrita.write(json);
-                escrita.close();
+            escrita.write(json);
+            escrita.close();
             leitor.close();
         } catch (IOException | NumberFormatException | InterruptedException | ConversaoDeAnoException e) {
             System.out.println("Ocorreu um erro: " + e.getMessage());
